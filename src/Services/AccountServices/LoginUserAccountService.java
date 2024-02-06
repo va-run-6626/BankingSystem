@@ -1,6 +1,7 @@
 package Services.AccountServices;
 
 import Database.Query.Query;
+import Entities.Customer;
 import Repository.Repository;
 
 import java.sql.PreparedStatement;
@@ -23,6 +24,16 @@ public class LoginUserAccountService implements ILogin{
             }
             return false;
         }catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public Customer getCustomer(String email) {
+        try{
+            Customer customer = this.repository.getCustomer(email);
+            return customer;
+        }catch (SQLException e){
             throw new RuntimeException(e);
         }
     }

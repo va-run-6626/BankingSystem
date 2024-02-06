@@ -25,4 +25,8 @@ public class AccountService {
     public boolean login(String email, String password, boolean isEmployee){
         return this.loginUserAccountService.login(email,password,isEmployee);
     }
+
+    public Customer getCustomer(String email) {
+        return this.loginUserAccountService.getCustomer(email);
+    }
 }

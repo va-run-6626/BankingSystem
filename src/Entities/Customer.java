@@ -15,4 +15,10 @@ public class Customer extends User{
         super(name, email, password, false);
         setAccount(name,email,balance,pin);
     }
+
+    public Customer(String name, String email, String password,long accountNumber,double balance, String pin) throws NullPointerException {
+        super(name, email, password, false);
+        setAccount(name,email,balance,pin);
+        this.account.setAccountNumber(accountNumber);
+    }
 }

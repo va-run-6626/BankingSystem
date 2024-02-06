@@ -6,5 +6,8 @@ public interface Query {
       String generateAccountNumber = "SELECT accountNumber FROM accounts ORDER BY accountNumber DESC LIMIT 1";
       String getPass = "SELECT password, isEmployee FROM user WHERE email = ?";
       String getCustomerStatus = "SELECT accountNumber, name, email, balance FROM accounts WHERE email = ?";
+      String listUsers = "SELECT accountNumber, name, email, balance FROM accounts";
+      String getCustomerInfoUser = "SELECT name, email, password FROM user WHERE email = ?";
+      String getCustomerInfoAccount = "SELECT accountNumber, balance, securityPin FROM accounts WHERE email = ?";
 
 }

@@ -11,19 +11,37 @@ import java.sql.*;
 
 public class UserRegisterRepository implements IUserRegisterRepository, Query {
     private Connection bankingConnection;
-    public UserRegisterRepository(Connection bankingConnection){
+    private Connection statementConnection;
+    public UserRegisterRepository(Connection bankingConnection, Connection statementConnection){
         this.bankingConnection = bankingConnection;
+        this.statementConnection = statementConnection;
     }
 
     @Override
     public void registerUser(Customer customer) throws SQLException {
        boolean account = registerAccountInDatabase(customer);
        boolean user = registerUserInDatabase(customer);
-       if(account && user){
+       CreateStatement(customer);
+       boolean entry = initaialEntry(customer);
+       if(account && user && entry){
            System.out.println("Customer Registered Successfully!!");
        }else{
            System.out.println("Registration failed!!");
        }
+    }
+
+    private boolean initaialEntry(Customer customer) throws SQLException{
+        String email = customer.getEmail();
+        String addOn = email.substring(0,email.length()-10);
+        String tableName = "stmt_"+addOn;
+        String query = "INSERT INTO "+tableName+"(transactionType, credit, balance) VALUES('CREDIT',"+customer.getAccount().getBalance()+","+customer.getAccount().getBalance()+")";
+        Statement statement = statementConnection.createStatement();
+        int affectedRows = statement.executeUpdate(query);
+        if(affectedRows > 0){
+            return true;
+        }else{
+            return false;
+        }
     }
 
     public boolean registerUserInDatabase(User user) throws SQLException{
@@ -59,6 +77,21 @@ public class UserRegisterRepository implements IUserRegisterRepository, Query {
         }else{
             return false;
         }
+    }
+    private void CreateStatement(Customer customer)throws SQLException{
+        String email = customer.getEmail();
+        String addOn = email.substring(0,email.length()-10);
+        String tableName = "stmt_"+addOn;
+        String query = "CREATE TABLE "+ tableName +"(" +
+                "entryNo INT AUTO_INCREMENT PRIMARY KEY," +
+                "date TIMESTAMP DEFAULT CURRENT_TIMESTAMP," +
+                "transactionType VARCHAR(255) NOT NULL," +
+                "credit DOUBLE," +
+                "debit DOUBLE," +
+                "balance DOUBLE NOT NULL" +
+                ")";
+        Statement statement = statementConnection.createStatement();
+        statement.execute(query);
     }
 
     @Override

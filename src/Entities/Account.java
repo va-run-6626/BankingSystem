@@ -27,6 +27,9 @@ public class Account {
     private void setAccountNumber() {
         this.accountNumber = generateAccountNumber();
     }
+    public void setAccountNumber(long accountNumber){
+        this.accountNumber = accountNumber;
+    }
 
     public String getEmail() {
         return email;
